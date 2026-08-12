@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AGRITWIN</title>
+    <meta
+      name="description"
+      content="AGRITWIN visual agricultural digital twin for tomato farm planning."
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/components.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-wrap" aria-label="AGRITWIN home">
+          <div class="brand-mark">🌱</div>
+          <span>AGRITWIN</span>
+        </div>
+
+        <nav class="topnav" aria-label="Main navigation">
+          <button class="nav-item active" data-screen="home">Home</button>
+          <button class="nav-item" data-screen="farm">My Farm</button>
+          <button class="nav-item" data-screen="digital-twin">Digital Twin</button>
+          <button class="nav-item" data-screen="simulator">What-If</button>
+          <button class="nav-item" data-screen="results">Results</button>
+        </nav>
+
+        <div class="topbar-actions" aria-label="Language selector">
+          <label class="language-select-label" for="language-select">Language</label>
+          <select id="language-select" class="language-select" aria-label="Language selector">
+            <option value="en">English — English</option>
+            <option value="as">অসমীয়া — Assamese (English fallback)</option>
+            <option value="bn">বাংলা — Bengali (English fallback)</option>
+            <option value="brx">बरʼ — Bodo (English fallback)</option>
+            <option value="doi">डोगरी — Dogri (English fallback)</option>
+            <option value="gu">ગુજરાતી — Gujarati (English fallback)</option>
+            <option value="hi">हिन्दी — Hindi (English fallback)</option>
+            <option value="kn">ಕನ್ನಡ — Kannada (English fallback)</option>
+            <option value="ks">कॉशुर / کٲشُر — Kashmiri (English fallback)</option>
+            <option value="kok">कोंकणी — Konkani (English fallback)</option>
+            <option value="ml">മലയാളം — Malayalam (English fallback)</option>
+            <option value="mni">মৈতৈলোন্ — Manipuri (English fallback)</option>
+            <option value="mr">मराठी — Marathi (English fallback)</option>
+            <option value="mai">मैथिली — Maithili (English fallback)</option>
+            <option value="ne">नेपाली — Nepali (English fallback)</option>
+            <option value="or">ଓଡ଼ିଆ — Odia (English fallback)</option>
+            <option value="pa">ਪੰਜਾਬੀ — Punjabi (English fallback)</option>
+            <option value="sa">संस्कृतम् — Sanskrit (English fallback)</option>
+            <option value="sat">ᱥᱟᱱᱛᱟᱲᱤ — Santhali (English fallback)</option>
+            <option value="sd">سنڌي — Sindhi (English fallback)</option>
+            <option value="ta">தமிழ் — Tamil</option>
+            <option value="te">తెలుగు — Telugu (English fallback)</option>
+            <option value="ur">اُردُو — Urdu (English fallback)</option>
+          </select>
+        </div>
+      </header>
+
+      <main class="page-shell">
+        <section class="screen active" id="screen-home">
+          <div class="hero-grid">
+            <div class="panel intro-panel">
+              <p class="eyebrow" data-i18n="goodMorning">Good Morning</p>
+              <h1 data-i18n="farmName">My Tomato Farm</h1>
+
+              <div class="info-strip">
+                <span class="chip" data-i18n="weather">🌤️ 34°C</span>
+                <span class="chip" data-i18n="waterStatus">💧 Water: Medium</span>
+                <span class="chip" data-i18n="cropStatus">🌱 Crop: Healthy</span>
+                <span class="chip" data-i18n="soilStatus">🌾 Soil: Good</span>
+              </div>
+
+              <div class="cta-group">
+                <button class="primary-btn" data-target-screen="digital-twin">
+                  See the farm
+                </button>
+                <button class="secondary-btn" data-target-screen="simulator">
+                  See what will happen
+                </button>
+              </div>
+
+              <div class="alert alert-success">
+                <span class="alert-icon">🟢</span>
+                <span data-i18n="healthyCrop">Crop is healthy</span>
+              </div>
+            </div>
+
+            <div class="panel preview-panel">
+              <div class="mini-scene">
+                <div class="mini-scene-header">
+                  <span>3D Farm Preview</span>
+                </div>
+                <div class="mini-field">
+                  <div class="mini-row"></div>
+                  <div class="mini-row"></div>
+                  <div class="mini-row"></div>
+                  <div class="mini-row"></div>
+                  <div class="mini-row"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-farm">
+          <div class="panel onboarding-panel">
+            <div class="onboarding-intro">
+              <p class="eyebrow" data-i18n="setupEyebrow">Set up your farm</p>
+              <h2 data-i18n="setupTitle">Tell us about your farm</h2>
+              <p data-i18n="setupDescription">Add your crop zones so AGRITWIN can show how your land is being used.</p>
+            </div>
+            <form id="farm-form" class="farm-form onboarding-form" novalidate>
+              <div class="field-group"><label for="farm-name" data-i18n="farmNameLabel">Farm name</label><input id="farm-name" name="farmName" type="text" value="My Tomato Farm" /></div>
+              <div class="field-group"><label for="farm-area" data-i18n="farmAreaLabel">Total farm area</label><div class="unit-input"><input id="farm-area" name="farmArea" type="number" min="0.1" step="0.1" value="5" /><span data-i18n="acres">acres</span></div></div>
+              <fieldset class="crop-allocation-group"><legend data-i18n="cropAllocationTitle">Plan your crop areas</legend><p class="field-hint" data-i18n="cropAllocationHint">Add each crop and assign the acres it will use.</p><div id="crop-allocation-list"></div><button type="button" class="secondary-btn add-crop-btn" id="add-crop-btn" data-i18n="addCrop">+ Add another crop</button><div class="allocation-summary"><span data-i18n="remainingArea">Remaining area</span><strong><span id="remaining-area">3</span> <span data-i18n="acres">acres</span></strong></div><div id="crop-zone-preview" class="crop-zone-preview" aria-live="polite"></div></fieldset>
+              <div class="field-group"><label for="soil-type" data-i18n="soilLabel">Soil type</label><select id="soil-type" name="soilType"><option value="Sandy" data-i18n="sandy">Sandy</option><option value="Loamy" selected data-i18n="loamy">Loamy</option><option value="Clay" data-i18n="clay">Clay</option><option value="Silty" data-i18n="silty">Silty</option></select></div>
+              <p id="farm-form-error" class="form-message error-message" role="alert" aria-live="polite"></p><p id="farm-form-success" class="form-message success-message" role="status" aria-live="polite"></p><button type="submit" class="primary-btn full-width" data-i18n="continue">Continue</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-digital-twin">
+          <div class="section-heading twin-header">
+            <div>
+              <p class="eyebrow">Digital Twin</p>
+              <h2>Live farm view</h2>
+            </div>
+            <div class="toolbar">
+              <button class="secondary-btn" id="reset-view-btn">Reset View</button>
+            </div>
+          </div>
+
+          <div class="twin-layout">
+            <div class="panel twin-canvas-panel">
+              <div id="digital-twin-canvas" aria-label="Interactive digital twin farm"></div>
+            </div>
+
+            <aside class="status-column">
+              <div class="status-card healthy" data-status="crop">
+                <span class="status-icon">🌱</span>
+                <div>
+                  <small>Crop</small>
+                  <strong id="crop-status-label">Healthy</strong>
+                </div>
+              </div>
+
+              <div class="status-card good" data-status="soil">
+                <span class="status-icon">🌾</span>
+                <div>
+                  <small>Soil</small>
+                  <strong id="soil-status-label">Good</strong>
+                </div>
+              </div>
+
+              <div class="status-card water" data-status="water">
+                <span class="status-icon">💧</span>
+                <div>
+                  <small>Water</small>
+                  <strong id="water-status-label">Medium</strong>
+                </div>
+              </div>
+
+              <div class="status-card sunny" data-status="weather">
+                <span class="status-icon">🌤️</span>
+                <div>
+                  <small>Weather</small>
+                  <strong id="weather-status-label">Hot</strong>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-simulator">
+          <div class="panel simulator-panel">
+            <div class="section-heading">
+              <p class="eyebrow">What-If Simulator</p>
+              <h2>Explore the farm future</h2>
+            </div>
+
+            <div class="simulator-grid">
+              <label class="slider-group">
+                <span>Irrigation</span>
+                <div class="slider-label-row">
+                  <small>0 L</small>
+                  <strong id="irrigation-value">15 L</strong>
+                  <small>30 L</small>
+                </div>
+                <input id="irrigation-slider" type="range" min="0" max="30" value="15" />
+              </label>
+
+              <label class="slider-group">
+                <span>Rainfall</span>
+                <div class="slider-label-row">
+                  <small>0 mm</small>
+                  <strong id="rainfall-value">12 mm</strong>
+                  <small>50 mm</small>
+                </div>
+                <input id="rainfall-slider" type="range" min="0" max="50" value="12" />
+              </label>
+
+              <label class="slider-group">
+                <span>Temperature</span>
+                <div class="slider-label-row">
+                  <small>25°C</small>
+                  <strong id="temp-value">34°C</strong>
+                  <small>40°C</small>
+                </div>
+                <input id="temperature-slider" type="range" min="25" max="40" value="34" />
+              </label>
+
+              <div class="duration-group">
+                <span>Simulation Duration</span>
+                <div class="duration-options">
+                  <button class="duration-btn active" data-duration="6">6 hours</button>
+                  <button class="duration-btn" data-duration="12">12 hours</button>
+                  <button class="duration-btn" data-duration="24">24 hours</button>
+                  <button class="duration-btn" data-duration="48">48 hours</button>
+                </div>
+              </div>
+            </div>
+
+            <button class="primary-btn simulate-btn">🔮 Simulate Future</button>
+          </div>
+        </section>
+
+        <section class="screen" id="screen-results">
+          <div class="panel results-panel">
+            <div class="section-heading">
+              <p class="eyebrow">Simulation Results</p>
+              <h2>Compare scenarios</h2>
+            </div>
+
+            <div class="result-grid">
+              <article class="scenario-card stress">
+                <h3>No Irrigation</h3>
+                <div class="scenario-emoji">🥀</div>
+                <p class="scenario-title">High Stress</p>
+                <p>💧 0 L</p>
+                <span class="scenario-level danger">High Risk</span>
+              </article>
+
+              <article class="scenario-card recommended">
+                <h3>Moderate Irrigation</h3>
+                <div class="scenario-emoji">🌱</div>
+                <p class="scenario-title">Low Stress</p>
+                <p>💧 15 L</p>
+                <span class="scenario-level success">Recommended</span>
+              </article>
+
+              <article class="scenario-card warning">
+                <h3>High Irrigation</h3>
+                <div class="scenario-emoji">🌿</div>
+                <p class="scenario-title">Very Low Stress</p>
+                <p>💧 30 L</p>
+                <span class="scenario-level warning">More Water</span>
+              </article>
+            </div>
+
+            <div class="recommendation-box">
+              <h3>🧠 AGRITWIN Recommends</h3>
+              <p id="recommendation-text">15 L irrigation for the next 24 hours.</p>
+              <button class="secondary-btn" id="why-this-btn">Why this?</button>
+              <div id="why-this-panel" class="why-panel hidden">
+                <p>Why this recommendation?</p>
+                <ul>
+                  <li>🌾 Your soil is becoming dry.</li>
+                  <li>🌡️ The temperature is high.</li>
+                  <li>💧 15 L is enough to keep soil moisture healthy.</li>
+                  <li>💧 Using 30 L may waste water without much extra benefit.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Mobile navigation">
+        <button class="bottom-nav-item active" data-screen="home">🏠</button>
+        <button class="bottom-nav-item" data-screen="farm">🧺</button>
+        <button class="bottom-nav-item" data-screen="digital-twin">🌿</button>
+        <button class="bottom-nav-item" data-screen="simulator">🔮</button>
+        <button class="bottom-nav-item" data-screen="results">📊</button>
+      </nav>
+    </div>
+
+    <script src="./locales/en.js"></script>
+    <script src="./locales/ta.js"></script>
+    <script src="./js/localization.js"></script>
+    <script src="./js/state.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/digitalTwin.js"></script>
+    <script src="./js/simulation.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
